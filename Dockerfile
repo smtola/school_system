@@ -15,9 +15,11 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js and npm for TailwindCSS build
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest
+
+RUN chown -R www-data:www-data /var/www/html/storage
 
 # Set working directory
 WORKDIR /var/www/html

@@ -27,7 +27,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies via Composer
-RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-interaction --prefer-dist --optimize-autoloader
+# RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Install Node.js dependencies (TailwindCSS)
 RUN npm install

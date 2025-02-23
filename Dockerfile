@@ -27,9 +27,8 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies via Composer
-RUN apt-get update && apt-get install -y \
-    php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip \
-    && composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer clear-cache && composer self-update
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Install Node.js dependencies (TailwindCSS)
 RUN npm install

@@ -47,9 +47,6 @@ FROM nginx:alpine
 # Copy built frontend assets
 COPY --from=builder /app/public /var/www/html/public
 
-# Copy the Nginx configuration file (make sure you have this)
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Expose port 80
 EXPOSE 80
 

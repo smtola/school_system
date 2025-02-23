@@ -17,6 +17,7 @@ WORKDIR /var/www/html
 # Copy PHP project files
 COPY . .
 
+
 # Stage 2: Node.js for Asset Building
 FROM node:20 AS builder
 

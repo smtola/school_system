@@ -1,4 +1,4 @@
-# Stage 1: Base PHP-FPM Image with Composer
+# Stage 1: PHP with Composer
 FROM php:8.1-fpm AS php
 
 # Install dependencies for Laravel & SQLite
@@ -20,6 +20,7 @@ WORKDIR /var/www/html
 # Copy PHP project files
 COPY . .
 
+# Install PHP dependencies
 # Stage 2: Node.js for Asset Building
 FROM node:20 AS builder
 
@@ -38,16 +39,16 @@ COPY . .
 # Build the frontend assets
 RUN npm run build
 
-# Stage 3: Final Image (PHP + Built Assets)
+# Stage 3: Final Image with PHP-FPM
 FROM php:8.1-fpm AS final
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy PHP project files from the PHP stage
+# Copy PHP project files from PHP stage
 COPY --from=php /var/www/html .
 
-# Copy built frontend assets from the Node.js stage
+# Copy built frontend assets from Node.js stage
 COPY --from=builder /app/public /var/www/html/public
 
 # Expose port 9000 for PHP-FPM

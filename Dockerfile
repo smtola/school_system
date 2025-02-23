@@ -19,7 +19,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest
 
-RUN chown -R www-data:www-data /var/www/html/storage
+RUN groupadd -r www-data && useradd -r -g www-data www-data \
+    && chown -R www-data:www-data /var/www/html/storage
 
 # Set working directory
 WORKDIR /var/www/html

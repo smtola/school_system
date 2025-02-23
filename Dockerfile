@@ -1,7 +1,6 @@
-# Stage 1: PHP with Composer (PHP-FPM)
-FROM php:8.1-fpm AS php
+FROM php:8.1-fpm
 
-# Install dependencies for Laravel & SQLite
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -9,52 +8,20 @@ RUN apt-get update && apt-get install -y \
     zip \
     git \
     sqlite3 \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Configure PHP-FPM to listen on port 9000 for all interfaces
+RUN echo "listen = 0.0.0.0:9000" > /usr/local/etc/php-fpm.d/zz-app.conf
+
 WORKDIR /var/www/html
 
-# Copy PHP project files
+# Copy application files
 COPY . .
 
-# Start PHP-FPM
-CMD ["php-fpm"]
-
-# Stage 2: Node.js for Asset Building (Vite + Tailwind)
-FROM node:20 AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy only package.json and package-lock.json for caching
-COPY package*.json ./
-
-# Install Node.js dependencies
-RUN npm install
-
-# Copy entire project for Tailwind & Vite build
-COPY . .
-
-# Build the frontend assets
-RUN npm run build
-
-# Stage 3: Final Image with Nginx + PHP-FPM
-FROM nginx:alpine AS final
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy PHP project files from PHP stage
-COPY --from=php /var/www/html .
-
-# Copy built frontend assets from Node.js stage
-COPY --from=builder /app/public /var/www/html/public
-
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 9000 for PHP-FPM
-EXPOSE 9000
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Create SQLite database file and set permissions
+RUN mkdir -p storage \
+    && touch storage/database.sqlite \
+    && chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage

@@ -41,14 +41,20 @@ COPY . .
 # Build the frontend assets
 RUN npm run build
 
-# Stage 3: Nginx for Serving the Application
-FROM nginx:alpine
+# Stage 3: Final Image (PHP + Built Assets)
+FROM php:8.1-fpm AS final
 
-# Copy built frontend assets
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy PHP project files from the PHP stage
+COPY --from=php /var/www/html .
+
+# Copy built frontend assets from the Node.js stage
 COPY --from=builder /app/public /var/www/html/public
 
-# Expose port 80
-EXPOSE 80
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
 
 # Start PHP-FPM
-CMD ["php-fpm"]
+CMD ["php-fpm", "-F"]

@@ -4,10 +4,19 @@ services:
   app:
     build: .
     container_name: laravel-app
-    ports:
-      - 8080:80
     volumes:
       - .:/var/www/html
+    networks:
+      - app-network
+
+  nginx:
+    build: .
+    container_name: nginx-server
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8000:80
     networks:
       - app-network
 

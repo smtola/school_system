@@ -1,4 +1,4 @@
-# Stage 1: PHP with Composer
+# Stage 1: PHP with Composer (PHP-FPM)
 FROM php:8.1-fpm AS php
 
 # Install dependencies for Laravel & SQLite
@@ -17,8 +17,10 @@ WORKDIR /var/www/html
 # Copy PHP project files
 COPY . .
 
+# Start PHP-FPM
+CMD ["php-fpm"]
 
-# Stage 2: Node.js for Asset Building
+# Stage 2: Node.js for Asset Building (Vite + Tailwind)
 FROM node:20 AS builder
 
 # Set working directory

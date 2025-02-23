@@ -20,9 +20,6 @@ WORKDIR /var/www/html
 # Copy PHP project files
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
 # Stage 2: Node.js for Asset Building
 FROM node:20 AS builder
 

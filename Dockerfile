@@ -1,25 +1,26 @@
-FROM php:8.1-fpm
+FROM php:8.4.2
 
-# Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    git \
-    sqlite3 \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql pdo_sqlite \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get install -y openssl zip unzip git
 
-# Configure PHP-FPM to listen on all interfaces
-RUN echo "listen = 0.0.0.0:9000" > /usr/local/etc/php-fpm.d/zz-app.conf
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /var/www/html
+# Install SQLITE client
+RUN apt-get install -y sqlite3 libsqlite3-dev
 
-# Copy files and set permissions
-COPY . .
-RUN mkdir -p storage \
-    && touch storage/database.sqlite \
-    && chown -R www-data:www-data storage \
-    && chmod -R 775 storage
+# Install PHP extensions for SQLite
+RUN docker-php-ext-install pdo pdo_sqlite
+
+# Check if mbstring extension is installed
+RUN php -m | grep mbstring
+
+WORKDIR /app
+
+COPY . /app
+
+RUN composer install
+
+EXPOSE 8000
+# Default command
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+
+

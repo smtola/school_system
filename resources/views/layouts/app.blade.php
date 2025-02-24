@@ -41,8 +41,8 @@
                             </a>
                         </li>
                         <li
-                            class="py-2 p-3 w-full hover:border-r-4 rounded-sm hover:bg-blue-600 hover:border-red-500 transition-all duration-300 {{ Route::is('home') ? 'bg-blue-600 border-r-4 border-red-500 ' : '' }}">
-                            <a href="{{ route('home') }}" class="hover:text-gray-300 flex items-center space-x-2"><span>
+                            class="py-2 p-3 w-full hover:border-r-4 rounded-sm hover:bg-blue-600 hover:border-red-500 transition-all duration-300 {{ Route::is('dashboard') ? 'bg-blue-600 border-r-4 border-red-500 ' : '' }}">
+                            <a href="{{ route('dashboard') }}" class="hover:text-gray-300 flex items-center space-x-2"><span>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="1.25">
                                         <path d="M3 3v18h18"></path>

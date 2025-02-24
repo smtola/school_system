@@ -19,9 +19,6 @@ WORKDIR /app
 
 COPY . /app
 
-# Install Composer dependencies
-RUN composer install
-
 # Install npm dependencies and build assets
 RUN npm install
 RUN npm run build

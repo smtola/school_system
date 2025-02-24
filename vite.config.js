@@ -8,4 +8,8 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        strictPort: true,
+        https: true,  // Ensure assets are served over HTTPS
+    },
 });

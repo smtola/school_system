@@ -21,8 +21,6 @@ COPY . /app
 
 COPY .env /app/.env
 
-# Install npm dependencies and build assets
-RUN npm run build
 
 EXPOSE 8000
 

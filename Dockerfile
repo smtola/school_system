@@ -1,4 +1,4 @@
-FROM php:8.4.2
+FROM php:8.3
 
 RUN apt-get update -y && apt-get install -y openssl zip unzip git
 
@@ -19,6 +19,8 @@ WORKDIR /app
 
 COPY . /app
 
+COPY .env /app/.env
+
 # Install npm dependencies and build assets
 RUN npm install
 RUN npm run build
@@ -27,3 +29,4 @@ EXPOSE 8000
 
 # Default command
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+
